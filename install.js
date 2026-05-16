@@ -14,7 +14,10 @@ module.exports = {
         path: "app",
         message: [
           "uv sync",
-          "uv pip install torchao"
+          // Force stable Torch 2.5.1 (Verified for ACE-Step 1.5)
+          "uv pip install torch==2.5.1 torchvision torchaudio --index-url https://download.pytorch.org/whl/cu124",
+          // Force stable TorchAO to restore C++ extensions
+          "uv pip install torchao==0.6.1"
         ]
       }
     },
