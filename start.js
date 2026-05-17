@@ -6,9 +6,10 @@ module.exports = {
       params: {
         env: { 
           "PYTHONPATH": ".", 
-          "GPU_OFFLOAD_THRESHOLD": "15.0",      // Fixes the "Garbage" Audio
-          "ACE_PRECISION": "bf16",              // Fixes the Digital Noise
-          "LM_MODEL_CHOICE": "acestep-5Hz-lm-4B" // Uses the high-fidelity planner
+          "GPU_OFFLOAD_THRESHOLD": "15.0",      // FORCES the model to stay in VRAM
+          "ACE_PRECISION": "bf16",              // REMOVES digital grain noise
+          "LM_MODEL_CHOICE": "acestep-5Hz-lm-4B", // USES the high-fidelity planner
+          "UV_CERT_CHECK": "false"
         },
         path: "app",
         message: [
