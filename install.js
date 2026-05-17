@@ -11,14 +11,15 @@ module.exports = {
       params: {
         path: "app",
         message: [
-          // 1. Force the stable foundation that works with Windows and your eGPU
+          "uv venv",
+          // 1. Force the Stable Foundation (Fixes the current OSError/Crash)
           "uv pip install torch==2.5.1 torchvision==0.20.1 torchaudio==2.5.1 --index-url https://download.pytorch.org/whl/cu124",
-          // 2. Fix the HfFolder error by pinning a compatible hub version
-          "uv pip install huggingface_hub==0.24.3",
-          // 3. Install the specific torchao that works with 2.5.1 (Enables high-precision math)
-          "uv pip install torchao==0.6.1",
-          // 4. Install the rest of the dependencies BUT DO NOT allow them to update Torch
-          "uv pip install -r requirements.txt --no-deps"
+          // 2. Lock the Hub version (Fixes the HfFolder and is_offline_mode errors)
+          "uv pip install huggingface_hub==0.24.3 torchao==0.6.1",
+          // 3. Install the app logic without letting it update Torch
+          "uv pip install transformers diffusers accelerate librosa soundfile einops omegaconf pytorch-lightning pydantic-settings gradio==5.6.0 loguru fastapi diskcache uvicorn numba vector-quantize-pytorch einx toml peft lycoris-lora tensorboard typer-slim pytorch-wavelets pywavelets matplotlib scipy",
+          // 4. Register the app
+          "uv pip install -e . --no-deps"
         ]
       }
     }
