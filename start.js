@@ -4,12 +4,15 @@ module.exports = {
     {
       method: "shell.run",
       params: {
+        // We inject the "Studio" settings directly into the environment
+        env: { 
+          "GPU_OFFLOAD_THRESHOLD": "15.0", // Forces your 20GB card to stay in VRAM
+          "ACE_PRECISION": "bf16",         // Forces high-fidelity math
+          "LM_MODEL_CHOICE": "acestep-5Hz-lm-4B" // Forces the high-end planner
+        },
         path: "app",
         message: [
-          // --no-sync: Prevents UV from trying to "fix" our stable environment with nightly builds
-          // --precision bf16: Stops the digital "grain" noise
-          // --offload_threshold 15: Forces your 20GB card to keep both 4B models in VRAM for clarity
-          "uv run --no-sync python -m acestep.acestep_v15_pipeline --port {{port}} --init_service true --init_llm true --backend pt --lm_model_path acestep-5Hz-lm-4B --precision bf16 --offload_threshold 15"
+          "uv run --no-sync python -m acestep.acestep_v15_pipeline --port {{port}} --init_service true --init_llm true --backend pt --device cuda"
         ],
         on: [{ event: "/(http:\/\/[0-9.:]+)/", done: true }]
       }
