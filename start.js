@@ -4,18 +4,22 @@ module.exports = {
     {
       method: "shell.run",
       params: {
-        // We inject the "Studio" settings directly into the environment
         env: { 
-          "GPU_OFFLOAD_THRESHOLD": "15.0", // Forces your 20GB card to stay in VRAM
-          "ACE_PRECISION": "bf16",         // Forces high-fidelity math
-          "LM_MODEL_CHOICE": "acestep-5Hz-lm-4B" // Forces the high-end planner
+          "PYTHONPATH": ".", 
+          "GPU_OFFLOAD_THRESHOLD": "15.0",      // Fixes the "Garbage" Audio
+          "ACE_PRECISION": "bf16",              // Fixes the Digital Noise
+          "LM_MODEL_CHOICE": "acestep-5Hz-lm-4B" // Uses the high-fidelity planner
         },
         path: "app",
         message: [
-          "uv run --no-sync python -m acestep.acestep_v15_pipeline --port {{port}} --init_service true --init_llm true --backend pt --device cuda"
+          ".venv\\Scripts\\python.exe -m acestep.acestep_v15_pipeline --port {{port}} --init_service true --init_llm true --backend pt --device cuda"
         ],
         on: [{ event: "/(http:\/\/[0-9.:]+)/", done: true }]
       }
+    },
+    {
+      method: "local.set",
+      params: { url: "{{input.event[1]}}" }
     }
   ]
 }
